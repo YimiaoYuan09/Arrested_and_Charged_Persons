@@ -1,44 +1,38 @@
 #### Preamble ####
 # Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Author: Yimiao Yuan
+# Date: 21 January 2024
+# Contact: yimiaomail@gmail.com
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
+# Pre-requisites: run 01-download_data.R in scripts folder first to get the raw data.
 # Any other information needed? [...UPDATE THIS...]
 
 #### Workspace setup ####
+# install the packages
+# install.packages("tidyverse")
+# install.packages("janitor)
+
+# load the packages
 library(tidyverse)
+library(janitor)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_arrested_person <- read_csv("inputs/data/raw_arrested_person_data.csv")
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+# clean the names to read easily
+# select columns that I interested in
+# drop the unknown rows
+# rename the column names
+cleaned_arrested_person <-
+  raw_arrested_person |>
+  clean_names() |>
+  select(arrest_year, division, sex, age_cohort, category, arrest_count) |>
+  filter(sex != "Unknown") |>
+  filter(age_cohort != "Unknown") |>
+  rename(year = arrest_year,
+         age = age_cohort,
+         num_of_arrested_person = arrest_count)
+
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+write_csv(cleaned_arrested_person, "outputs/data/cleaned_arrested_person_data.csv")
