@@ -20,6 +20,8 @@ bibliography: references.bib
 # load the packages
 library(tidyverse)
 library(knitr)
+library(opendatatoronto)
+library(readr)
 
 # read in the raw data
 raw_arrested_person <- read_csv(here::here("inputs", "data", "raw_arrested_person_data.csv"),
@@ -33,15 +35,15 @@ cleaned_arrested_person <- read_csv(here::here("outputs", "data", "cleaned_arres
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. 
+Canada is considered a very safe country and attracts a large number of international students and immigrants from all over the world every year. In 2023 alone, Canada welcomed 900,000 international students (@citeImmigrationCA). As more and more people come, the safety of people becomes a very important issue, especially in busy cities like Toronto. Therefore, it is necessary to investigate the data of offenders every year, so that the government and the police can effectively understand the data and patterns of crime in different areas, make corresponding policy adjustments and alert the public.
 
-The remainder of this paper is structured as follows. @sec-data....
+In this paper, we use R to analyze a dataset from opendatatoronto on on arrested and charged persons to better understand how the number of arrested and charged persons and the corresponding victims have changed from 2014 to 2022 in Toronto. The dataset was analyzed using tables and other useful visualizations such as bar charts and line graphs. The results found that the number of people arrested and charged decreased between 2014 and 2019, and then has a trend of increasing again from 2020 to 2022. It is also interesting to note that the majority of offenders chose males over females to commit their crimes, with a concentration of ages between 18 and 44. Overall, these data trends confirm that the City of Toronto is aware of the issue of people's safety and is working to address it and improve the safety of the city.
 
-
+The remainder of this paper is structured as follows: @sec-data demonstrates the dataset being processed and used, and analyzes it through tables and graphs to show changes in arrested and charged persons overtime.
 
 # Data {#sec-data}
 
-This report uses "Police Annual Statistical Report - Arrested and Charged Persons" as the primary dataset, which obtained from the City of Toronto’s Open Data Portal (@CityofToronto). This dataset was accessed through 'R' (@citeR) using 'opendatatoronto' package (@opendatatoronto) and saved using 'readr' (@readr). The data is published by Toronto Police Services and refreshed on a yearly basis, with last updated on January 14, 2024. This dataset provides a total count of persons who have been arrested and charged over a period of time. The data consists 129374 rows and 11 variables, each indicating a detailed summary of the crime with the year the arrest was made, location of the crime, victim informations and count of arrested and charged person. The following table shows a preview of the primary dataset.
+This report uses "Police Annual Statistical Report - Arrested and Charged Persons" as the primary dataset, which obtained from the City of Toronto’s Open Data Portal (@citeDataset). This dataset was accessed through 'R' (@citeR) using 'opendatatoronto' package (@citeOpendatatoronto) and saved using 'readr' (@citeReadr). The data is published by Toronto Police Services and refreshed on a yearly basis, with last updated on January 14, 2024. This dataset provides a total count of persons who have been arrested and charged over a period of time. The data consists 129374 rows and 11 variables, each indicating a detailed summary of the crime with the year the arrest was made, location of the crime, victim informations and count of arrested and charged person. The following table shows a preview of the primary dataset.
 
 ```{r}
 #| label: tbl-raw
@@ -58,7 +60,7 @@ raw_arrested_person[1:3, 9:11] |>
   kable(booktabs = TRUE)
 ```
 
-Since it is difficult to observe through 129374 rows with 11 variables, this reports will only observe and analyze through specific aspects. The dataset contains information about victims, so one way is to focus on the number of arrested and charged person through the victims aspects. In addition, it stated the geographic division and the neighbourhood of the crime location, so we can further investigate the dataset on the division perspective. The analysis data was cleaned to exclude the "unknown" information on the sex and age_cohort column and "No Specified Address (NSA)" on the division column to have more specific and detailed data. The cleaned data will be analyzed and performed using R (@citeR) with 'tidyverse' (@tidyverse), 'dplyr' (@dplyr), 'ggplot2' (@ggplot2) and 'here' (@here).
+Since it is difficult to observe through 129374 rows with 11 variables, this reports will only observe and analyze through specific aspects. The dataset contains information about victims, so one way is to focus on the number of arrested and charged person through the victims aspects. In addition, it stated the geographic division and the neighbourhood of the crime location, so we can further investigate the dataset on the division perspective. The analysis data was cleaned to exclude the "unknown" information on the sex and age_cohort column and "No Specified Address (NSA)" on the division column to have more specific and detailed data. The cleaned data will be analyzed and performed using R (@citeR) with 'tidyverse' (@citeTidyverse), 'knitr' (@citeKnitr), 'dplyr' (@citeDplyr), 'ggplot2' (@citeGgplot2) and 'here' (@citeHere).
 
 The dataset that this report will be using to analyze through the report consists five variables: arrest year, division, victims' age and sex, and the count of the arrested and charged person. Working with these variables, we can generate a great deal of graphs to gain a better understand of how the crime cases changed through time. @fig-year shows the total number of arrested and charged person each year.
 
@@ -110,7 +112,7 @@ ggplot(count_arrested_person_div, aes(x = division, y = count_arrest_div,
   labs(x = "Division", y = "Number of arrested and charged person", fill = "Arrested year")
 ```
 
-From @fig-division, we can see that the totals for D51 and D52 are significantly higher than the other divisions, with a total of nearly 60000 people, suggesting that more people are committing crimes in these two areas and that it is more dangerous for people living in Toronto. In comparison, D13, D33 and D53 have a more favorable performance, with overall offenses around 20000 over a nine-year period. Overall, the number of arrested and charged person in each district shows a downward trend in each year, but in D14, D33, D43 and D53, there is a more significant increase in 2022.
+From @fig-division, we can see that the number of arrested and charged person in D51 and D52 are significantly higher than the other divisions, with a total of 58450 and 57021 people respectively, suggesting that more people are committing crimes in these two areas and that it is more dangerous for people living in Toronto. In comparison, D13, D33 and D53 have a more favorable performance, with overall offenses around 20000 over a nine-year period. Overall, the number of arrested and charged person in each district shows a downward trend in each year, but in D14, D33, D43 and D53, there is a more significant increase in 2022.
 
 After understanding the data in terms of overall crime, we can also analyze data based on victim information, which shown in @fig-sex and @fig-age.
 
