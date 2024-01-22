@@ -24,7 +24,7 @@ cleaned_arrested_person <- read_csv("outputs/data/cleaned_arrested_person_data.c
 
 # check column class
 # year, num_of_arrested_person: numeric
-class(cleaned_arrested_person$year) == "numeric"
+class(cleaned_arrested_person$arrest_year) == "numeric"
 class(cleaned_arrested_person$num_of_arrested_person) == "numeric"
 
 # division, sex, age, category: character

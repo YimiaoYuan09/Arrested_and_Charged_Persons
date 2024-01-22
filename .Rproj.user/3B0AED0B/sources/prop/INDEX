@@ -2,6 +2,7 @@
 %2Fcloud%2Fproject%2Foutputs%2Fdata%2Fanalysis_data.csv="991526B3"
 %2Fcloud%2Fproject%2Foutputs%2Fdata%2Fcleaned_data.csv="AB146C3A"
 %2Fcloud%2Fproject%2Foutputs%2Fpaper%2Fpaper.qmd="28C12C3F"
+%2Fcloud%2Fproject%2Foutputs%2Fpaper%2Freferences.bib="7C5BB4D0"
 %2Fcloud%2Fproject%2Fscripts%2F00-simulate_data.R="FECB0C14"
 %2Fcloud%2Fproject%2Fscripts%2F01-download_data.R="FBF30FD8"
 %2Fcloud%2Fproject%2Fscripts%2F02-data_cleaning.R="CA7C291D"

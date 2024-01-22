@@ -30,8 +30,8 @@ cleaned_arrested_person <-
   select(arrest_year, division, sex, age_cohort, category, arrest_count) |>
   filter(sex != "Unknown") |>
   filter(age_cohort != "Unknown") |>
-  rename(year = arrest_year,
-         age = age_cohort,
+  filter(division != "NSA") |>  # NSA: No Specified Address
+  rename(age = age_cohort,
          num_of_arrested_person = arrest_count)
 
 
