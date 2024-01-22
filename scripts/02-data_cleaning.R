@@ -1,11 +1,12 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
+# Purpose: Cleans the raw data of arrested and charged persons that downloaded from
+# the OpenDataToronto website.
 # Author: Yimiao Yuan
 # Date: 21 January 2024
 # Contact: yimiaomail@gmail.com
 # License: MIT
 # Pre-requisites: run 01-download_data.R in scripts folder first to get the raw data.
-# Any other information needed? [...UPDATE THIS...]
+# Any other information needed? -
 
 #### Workspace setup ####
 # install the packages
