@@ -27,7 +27,7 @@ raw_arrested_person <- read_csv("inputs/data/raw_arrested_person_data.csv")
 cleaned_arrested_person <-
   raw_arrested_person |>
   clean_names() |>
-  select(arrest_year, division, sex, age_cohort, category, arrest_count) |>
+  select(arrest_year, division, sex, age_cohort, arrest_count) |>
   filter(sex != "Unknown") |>
   filter(age_cohort != "Unknown") |>
   filter(division != "NSA") |>  # NSA: No Specified Address

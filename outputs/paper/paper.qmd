@@ -3,7 +3,7 @@ title: "My title"
 subtitle: "My subtitle if needed"
 author: 
   - Yimiao Yuan
-thanks: "Code and data are available at: LINK."
+thanks: "Code and data are available at: https://github.com/YimiaoYuan09/Arrested_and_Charged_Persons.git"
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
@@ -19,6 +19,15 @@ bibliography: references.bib
 
 # load the packages
 library(tidyverse)
+library(knitr)
+
+# read in the raw data
+raw_arrested_person <- read_csv(here::here("inputs", "data", "raw_arrested_person_data.csv"),
+                                show_col_types = FALSE)
+
+# read in the cleaned data
+cleaned_arrested_person <- read_csv(here::here("outputs", "data", "cleaned_arrested_person_data.csv"),
+                                    show_col_types = FALSE)
 ```
 
 
@@ -32,31 +41,34 @@ The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
 
-the source of the data and the broader context that gave rise to it
-
-This report uses "Police Annual Statistical Report - Arrested and Charged Persons" as the primary dataset, which obtained from the City of Toronto’s Open Data Portal (@CityofToronto). This dataset was accessed through R (@citeR) using opendatatoronto package (@opendatatoronto) and saved using readr (@readr). 
+This report uses "Police Annual Statistical Report - Arrested and Charged Persons" as the primary dataset, which obtained from the City of Toronto’s Open Data Portal (@CityofToronto). This dataset was accessed through 'R' (@citeR) using 'opendatatoronto' package (@opendatatoronto) and saved using 'readr' (@readr). The data is published by Toronto Police Services and refreshed on a yearly basis, with last updated on January 14, 2024. This dataset provides a total count of persons who have been arrested and charged over a period of time. The data consists 129374 rows and 11 variables, each indicating a detailed summary of the crime with the year the arrest was made, location of the crime, victim informations and count of arrested and charged person. The following table shows a preview of the primary dataset.
 
 ```{r}
+#| label: tbl-raw
+#| tbl-cap: "Preview of the arrested and charged persons dataset"
+#| message: false
 #| echo: false
+raw_arrested_person[1:3, 1:5] |>
+  kable(booktabs = TRUE)
 
-# read in the data
-cleaned_arrested_person <- read_csv(here::here("outputs", "data", "cleaned_arrested_person_data.csv"),
-                                    show_col_types = FALSE)
+raw_arrested_person[1:3, 6:8] |>
+  kable(booktabs = TRUE)
+
+raw_arrested_person[1:3, 9:11] |>
+  kable(booktabs = TRUE)
 ```
 
-describe and summarize the data using text, graphs, and tables
+Since it is difficult to observe through 129374 rows with 11 variables, this reports will only observe and analyze through specific aspects. The dataset contains information about victims, so one way is to focus on the number of arrested and charged person through the victims aspects. In addition, it stated the geographic division and the neighbourhood of the crime location, so we can further investigate the dataset on the division perspective. The analysis data was cleaned to exclude the "unknown" information on the sex and age_cohort column and "No Specified Address (NSA)" on the division column to have more specific and detailed data. The cleaned data will be analyzed and performed using R (@citeR) with 'tidyverse' (@tidyverse), 'dplyr' (@dplyr), 'ggplot2' (@ggplot2) and 'here' (@here).
+
+The dataset that this report will be using to analyze through the report consists five variables: arrest year, division, victims' age and sex, and the count of the arrested and charged person. Working with these variables, we can generate a great deal of graphs to gain a better understand of how the crime cases changed through time. @fig-year shows the total number of arrested and charged person each year.
 
 ```{r}
-#| echo: false
-
+#| include: false
 count_arrested_person_year <-
   cleaned_arrested_person |>
   group_by(arrest_year) |>
   summarise(count_arrest_year = sum(num_of_arrested_person))
 ```
-
-
-Some of our data is of penguins (@fig-year), from @palmerpenguins.
 
 ```{r}
 #| label: fig-year
@@ -72,42 +84,10 @@ count_arrested_person_year |>
   labs(x = "Year", y = "Number of arrested and charged person")
 ```
 
-Talk more about it.
-
-And also planes (@fig-sex). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+According to this bar chart (@fig-year), we can see that the number of arrested and charged person is steadily decreasing each year. The number of arrested and charged person in 2014 is around 80000, which is the highest, then it is slowly decreasing from 2015 to 2017, and is slightly increasing from 2020 to 2022. For a more detailed analysis, we want to explore how this trend changes in specific divisions. The City of Toronto is divided into different police divisions, so we can take advantage of this to see how the number of arrested and charged person are changing in each division.
 
 ```{r}
-#| echo: false
-#| warning: false
-count_arrested_person_sex <-
-  cleaned_arrested_person |>
-  select(arrest_year, sex, num_of_arrested_person) |>
-  group_by(arrest_year, sex) |>
-  summarise(count_arrest_sex = sum(num_of_arrested_person))
-```
-
-
-```{r}
-#| label: fig-sex
-#| fig-cap: Number of arrested and charged person per gender each year
-#| echo: false
-#| warning: false
-#| message: false
-
-ggplot(count_arrested_person_sex, aes(x = arrest_year, y = count_arrest_sex, 
-                                      group = sex, color = sex)) +
-  geom_line() +
-  geom_point() +
-  theme_minimal() +
-  ggtitle("Number of arrested and charged person by gender") +
-  labs(x = "Year", y = "Number of arrested and charged person", color = "Gender")
-```
-
-Talk way more about it. 
-
-Some of our data is of penguins (@fig-division)
-
-```{r}
+#| include: false
 count_arrested_person_div <-
   cleaned_arrested_person |>
   group_by(arrest_year, division) |>
@@ -125,16 +105,47 @@ ggplot(count_arrested_person_div, aes(x = division, y = count_arrest_div,
                                       group = arrest_year, fill = arrest_year)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90)) +
   ggtitle("Number of arrested and charged person by location of crime") +
   labs(x = "Division", y = "Number of arrested and charged person", fill = "Arrested year")
 ```
 
-Talk way more about it. 
+From @fig-division, we can see that the totals for D51 and D52 are significantly higher than the other divisions, with a total of nearly 60000 people, suggesting that more people are committing crimes in these two areas and that it is more dangerous for people living in Toronto. In comparison, D13, D33 and D53 have a more favorable performance, with overall offenses around 20000 over a nine-year period. Overall, the number of arrested and charged person in each district shows a downward trend in each year, but in D14, D33, D43 and D53, there is a more significant increase in 2022.
 
-Some of our data is of penguins (@fig-age)
+After understanding the data in terms of overall crime, we can also analyze data based on victim information, which shown in @fig-sex and @fig-age.
 
 ```{r}
+#| include: false
+count_arrested_person_sex <-
+  cleaned_arrested_person |>
+  select(arrest_year, sex, num_of_arrested_person) |>
+  group_by(arrest_year, sex) |>
+  summarise(count_arrest_sex = sum(num_of_arrested_person))
+```
+
+```{r}
+#| label: fig-sex
+#| fig-cap: Number of arrested and charged person by victim's gender each year
 #| echo: false
+#| warning: false
+#| message: false
+
+ggplot(count_arrested_person_sex, aes(x = arrest_year, y = count_arrest_sex, 
+                                      group = sex, color = sex)) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  ggtitle("Number of arrested and charged person by victim's gender") +
+  labs(x = "Year", y = "Number of arrested and charged person", color = "Victim's Gender")
+```
+
+Based on @fig-sex, among all offenders, the number of people who choose male as victims is shockingly much higher than the number of people who choose female as victims. Victims of different genders show different trends. The number of people who choose female as victims drops from 2014 to 2015, remains almost constant from 2015 to 2019, then decreases sharply from 2019 to 2020, then starts to rise slightly from 2020 to 2022. The number of people who choose male as victims shows a continuous downward trend from 2014 to 2020, and then increases dramatically from 2020 to 2022. It is worth noting that for all genders, the number of victims decreases between 2019 to 2020 and then both increases from 2020 to 2022.
+
+
+Besides victim's gender, we can also analyze data through victim's age.
+
+```{r}
+#| include: false
 count_arrested_person_age <-
   cleaned_arrested_person |>
   group_by(age, sex) |>
@@ -143,28 +154,20 @@ count_arrested_person_age <-
 
 ```{r}
 #| label: fig-age
-#| fig-cap: Number of arrested and charged person per age group each year
+#| fig-cap: Number of arrested and charged person by victim's age group each year
 #| echo: false
 
 ggplot(count_arrested_person_age, aes(x = age, y = count_arrest_age, 
                                       group = sex, fill = sex)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
-  ggtitle("Number of arrested and charged person by age group") +
-  labs(x = "Age", y = "Number of arrested and charged person", fill = "Gender")
+  ggtitle("Number of arrested and charged person by victim's age group") +
+  labs(x = "Age", y = "Number of arrested and charged person", fill = "Victim's Gender")
 ```
 
+From @fig-age, we can see that most of the victims are centered between the ages of 18 to 44, which is in the young and middle-aged demographic. In contrast, victims over the age of 65 are the least. In general, most people who are arrested and charged choose adults and middle-aged people to commit crimes, they don't bother with the elderly and minors.
 
-Our results are summarized in @tbl-modelresults.
-
-
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-
-## Weaknesses and next steps
-
-Weaknesses and next steps should also be included.
+As can be seen from the four graphs, the overall number of crimes has been decreasing from year to year, but the number of crimes in several divisions has remained high. The police in these areas should strengthen their management or try a variety of preventive measures and warning notices to improve the current situation. It can also be seen that the victims tend to be young and middle-aged, perhaps because that they often leave early and return home late, and go to various crowded places. For further investigation, the data can be improved by looking at the time of the crime, the cause of the crime, or other factors to get more results and more specific conclusions.
 
 
 \newpage
