@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repo is an analysis of the trend of arrested and charged persons from 2014 to 2022, using the dataset from [Open Data Toronto] (https://open.toronto.ca/dataset/police-annual-statistical-report-arrested-and-charged-persons/).
+This repo is an analysis of the trend of arrested and charged persons from 2014 to 2022, using the dataset from [Open Data Toronto](https://open.toronto.ca/dataset/police-annual-statistical-report-arrested-and-charged-persons/).
 
 
 ## File Structure
