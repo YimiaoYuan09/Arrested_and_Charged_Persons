@@ -16,6 +16,13 @@ bibliography: references.bib
 #| warning: false
 #| message: false
 
+# install the packages
+# install.packages("tidyverse)
+# install.packages("knitr")
+# install.packages("opendatatoronto")
+# install.packages("readr")
+# install.packages("kableExtra")
+
 # load the packages
 library(tidyverse)
 library(knitr)
@@ -50,6 +57,8 @@ This report uses "Police Annual Statistical Report - Arrested and Charged Person
 #| tbl-cap: "Preview of the arrested and charged persons dataset"
 #| message: false
 #| echo: false
+
+# preview the raw data
 raw_arrested_person[1:3, 1:11] |>
   kable(booktabs = TRUE) |>
   kable_styling(latex_options = c('scale_down', 'hold_position'))
@@ -63,6 +72,8 @@ The dataset analyzed in this report consists five variables: arrest year, divisi
 
 ```{r}
 #| include: false
+
+# a table of total number of arrested and charged persons in each year
 count_arrested_person_year <-
   cleaned_arrested_person |>
   group_by(arrest_year) |>
@@ -73,6 +84,8 @@ count_arrested_person_year <-
 #| label: fig-year
 #| fig-cap: Number of arrested and charged person each year
 #| echo: false
+#| warning: false
+#| message: false
 
 count_arrested_person_year |>
   ggplot(aes(x = arrest_year, y = count_arrest_year)) +
@@ -89,6 +102,8 @@ According to this bar chart (@fig-year), we can see that the number of arrested 
 
 ```{r}
 #| include: false
+
+# a table of total number of arrested and charged persons in each year by division
 count_arrested_person_div <-
   cleaned_arrested_person |>
   group_by(arrest_year, division) |>
@@ -119,6 +134,8 @@ After understanding the data in terms of overall crime, we can also analyze data
 
 ```{r}
 #| include: false
+
+# a table of total number of arrested and charged persons in each year by victim's gender
 count_arrested_person_sex <-
   cleaned_arrested_person |>
   select(arrest_year, sex, num_of_arrested_person) |>
@@ -150,6 +167,8 @@ Besides victim's gender, we can also analyze data through victim's age.
 
 ```{r}
 #| include: false
+
+# a table of total number of arrested and charged persons in each year by victim's age
 count_arrested_person_age <-
   cleaned_arrested_person |>
   group_by(age, sex) |>
