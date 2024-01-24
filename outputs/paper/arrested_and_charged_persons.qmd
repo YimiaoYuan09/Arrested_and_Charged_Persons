@@ -44,13 +44,13 @@ cleaned_arrested_person <- read_csv(here::here("outputs", "data", "cleaned_arres
 
 Canada is considered a very safe country and attracts a large number of international students and immigrants from all over the world every year. In 2023 alone, Canada welcomed 900,000 international students (@citeImmigrationCA). As more and more people come, the safety of people becomes a very important issue, especially in busy cities like Toronto. Therefore, it is necessary to investigate the data of offenders every year, so that the government and the police can effectively understand the data and patterns of crime in different areas, make corresponding policy adjustments and alert the public.
 
-In this paper, we use 'R' (@citeR) to analyze a dataset on arrested and charged persons to better understand how the number of arrested and charged persons and the corresponding victims have changed from 2014 to 2022 in Toronto. The dataset was analyzed using tables and other useful visualizations such as bar charts and line graphs. The results found that the number of people arrested and charged decreased between 2014 and 2019, and then has a trend of increasing again from 2020 to 2022. It is also interesting to note that the majority of offenders chose males over females to commit their crimes, with a concentration of ages between 18 and 44. Overall, these data trends confirm that the City of Toronto is aware of the issue of people's safety and is working to address it and improve the safety of the city.
+In this paper, we use R (@citeR) to analyze a dataset on arrested and charged persons to better understand how the number of arrested and charged persons and the corresponding victims have changed from 2014 to 2022 in Toronto. The dataset was analyzed using tables and other useful visualizations such as bar charts and line graphs. The results found that the number of people arrested and charged decreased between 2014 and 2019, and then has a trend of increasing again from 2020 to 2022. It is also interesting to note that the majority of offenders chose males over females to commit their crimes, with a concentration of ages between 18 and 44. Overall, these data trends confirm that the City of Toronto is aware of the issue of people's safety and is working to address it and improve the safety of the city.
 
 The remainder of this paper is structured as follows: @sec-data demonstrates the dataset being processed and used, and analyzes it through tables and graphs to show changes in arrested and charged persons overtime.
 
 # Data {#sec-data}
 
-This report uses "Police Annual Statistical Report - Arrested and Charged Persons" as the primary dataset, which obtained from the City of Toronto’s Open Data Portal (@citeDataset). This dataset was accessed through 'R' (@citeR) using 'opendatatoronto' package (@citeOpendatatoronto) and saved using 'readr' (@citeReadr). The data is published by Toronto Police Services and refreshed on a yearly basis, with last updated on November 28, 2023. This dataset provides a total count of persons who have been arrested and charged over a period of time. The data consists 129374 rows and 11 variables, each indicating a detailed summary of the crime with the year the arrest was made, location of the crime, victims' information and count of arrested and charged persons. The following table (@tbl-raw) shows a preview of the primary dataset using 'knitr' (@citeKnitr) and 'kableExtra' (@citeKableExtra).
+This report uses "Police Annual Statistical Report - Arrested and Charged Persons" as the primary dataset, which obtained from the City of Toronto’s Open Data Portal (@citeDataset). This dataset was accessed through R (@citeR) using `opendatatoronto` package (@citeOpendatatoronto) and saved using `readr` (@citeReadr). The data is published by Toronto Police Services and refreshed on a yearly basis, with last updated on November 28, 2023. This dataset provides a total count of persons who have been arrested and charged over a period of time. The data consists 129374 rows and 11 variables, each indicating a detailed summary of the crime with the year the arrest was made, location of the crime, victims' information and count of arrested and charged persons. The following table (@tbl-raw) shows a preview of the primary dataset using `knitr` (@citeKnitr) and `kableExtra` (@citeKableExtra).
 
 ```{r}
 #| label: tbl-raw
@@ -66,7 +66,7 @@ raw_arrested_person[1:3, 1:11] |>
 
 Since it is difficult to observe through 129374 rows with 11 variables, this reports will only observe and analyze through specific aspects. The dataset contains information about victims, so one way is to focus on the number of arrested and charged person through the victims aspects. In addition, it stated the geographic division of the crime location, so we can further investigate the dataset on the division perspective. 
 
-The analysis data was cleaned to exclude the "unknown" information on the sex and age_cohort column and "No Specified Address (NSA)" on the division column to obtain more specific and detailed data. The cleaned data will be analyzed and performed using 'R' (@citeR) with 'tidyverse' (@citeTidyverse), 'knitr' (@citeKnitr), 'dplyr' (@citeDplyr), 'ggplot2' (@citeGgplot2) and 'here' (@citeHere).
+The analysis data was cleaned to exclude the "unknown" information on the sex and age_cohort column and "No Specified Address (NSA)" on the division column to obtain more specific and detailed data. The cleaned data will be analyzed and performed using R (@citeR) with `tidyverse` (@citeTidyverse), `knitr` (@citeKnitr), `dplyr` (@citeDplyr), `ggplot2` (@citeGgplot2) and `here` (@citeHere).
 
 The dataset analyzed in this report consists five variables: arrest year, division, victims' age, victims' gender, and the count of the arrested and charged person. Working with these variables, we can generate a great deal of graphs to gain a better understand of how the crime cases changed through time. @fig-year shows the total number of arrested and charged person each year.
 
@@ -121,7 +121,7 @@ ggplot(count_arrested_person_div, aes(x = division, y = count_arrest_div,
                                       group = arrest_year, fill = as.factor(arrest_year))) +
   geom_bar(stat = "identity") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(angle = 45)) +
   ggtitle("Number of arrested and charged person by location of crime") +
   labs(x = "Division", y = "Number of arrested and charged person", fill = "Arrested year")
 ```
