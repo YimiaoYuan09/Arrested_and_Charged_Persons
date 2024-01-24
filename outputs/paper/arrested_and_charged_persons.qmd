@@ -118,7 +118,7 @@ count_arrested_person_div <-
 #| message: false
 
 ggplot(count_arrested_person_div, aes(x = division, y = count_arrest_div, 
-                                      group = arrest_year, fill = arrest_year)) +
+                                      group = arrest_year, fill = as.factor(arrest_year))) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90)) +
